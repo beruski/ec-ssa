@@ -1,0 +1,25 @@
+10 0.1     # Simulation time and resolution for sampling
+
+298.15     # Temperature
+
+P          # Mode: P = potentiostatic
+0.4        # Applied electrode potential
+
+2          # Number of species
+2          # Number of reactions
+1000 0     # Initial population numbers
+1.0 1.0    # Transition coefficients
+
+1 0        # Reaction stoichiometry matrix, R(i,j) > 0
+0 1        # Each row gives the coefficient of a given species for that channel
+
+0 1        # Product stoichiometry matrix, P(i,j) > 0
+1 0        # Same as the R matrix
+
+
+1 -1       # Electron stoichiometry, n(i) > 0 oxidation; n(i) < 0 reduction
+0.5 0.5    # Transfer coefficients, 0 < A(i) <= 1.0, usually
+0.36 0.36  # Formal electrode potential
+
+           # Please delete the comments before running ec_ssa.py
+           # as the correct reading of this file depends on line breaking

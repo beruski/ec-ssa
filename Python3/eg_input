@@ -1,0 +1,20 @@
+10 0.1     # Simulation time and resolution for sampling
+
+298.15     # Temperature
+
+N          # Mode: N = non-electrochemical;
+           #       P = potentiostatic;
+           #       G = Galvanostatic
+2          # Number of species
+2          # Number of reactions
+1000 0     # Initial population numbers
+1.0 1.0    # Transition coefficients
+
+1 0        # Reaction matrix, R(i,j) > 0
+0 1        # Each row gives the coefficient of a given species for that channel
+
+0 1        # Product matrix, P(i,j) > 0
+1 0        # Same as the R matrix
+
+           # Please delete the comments before running ec_ssa.py,
+           # as the correct reading of this file depends on line breaking
