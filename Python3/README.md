@@ -1,4 +1,4 @@
-# ec-ssa/Matlab
+# ec-ssa/Python
 This directory of the ec_ssa repository is devoted to the
 Python scripts of the algorithm. The current version is:
 
