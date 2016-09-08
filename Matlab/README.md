@@ -1,3 +1,4 @@
+# ec-ssa/Matlab
 This directory of the ec_ssa repository is devoted to the
 MATLAB scripts of the algorithm. The current version is:
 
