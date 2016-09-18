@@ -1,7 +1,7 @@
 function res = ec_ssa(t,X,R,P,C,BV,U,I,K)
 % ec_ssa(t,X,R,P,C,BV,U,I,K)
 %
-% Electrochemical SSA v5.1. Evaluates the stochastic time evolution of a
+% Electrochemical SSA v5. Evaluates the stochastic time evolution of a
 % system with M reaction channels involving N species. Based on the work
 % described in:
 %
@@ -115,6 +115,7 @@ A = 0;   % Total reaction propensity
 a = zeros(1,M); % Individual reaction propensities
 T = zeros(S,1); % Sampled times
 Y = zeros(S,N); % Sampled population numbers
+Z = zeros(S,M); % Sampled reaction propensities
 
 if K == 1
     J = zeros(S,1); % Sample electric current
@@ -128,17 +129,6 @@ d = 0;
 x = 0;
 dx = 0;
 DU = 0;
-
-% Writing initial conditions
-
-Y(1,:) = X(:);
-if K == 1
-    J(1) = I;
-elseif K == 2
-    E(1) = U;
-end
-
-% The SSAs
 
 if K == 0
     while t <= t_max
@@ -158,10 +148,15 @@ if K == 0
                 elseif R(i,j) > 3
                     disp('Reaction order not implemented for indeces:');
                     disp([i j]);
-                    disp('Consider doing so after line 157');
+                    disp('Consider doing so after line 113');
                 end
             end
             A = A + a(i);
+        end
+        % Writing initial conditions
+        if s == 1
+            Y(s,:) = X(:);
+            Z(s,:) = a(:);
         end
         % Checking for equillibrium
         if A == 0
@@ -209,12 +204,17 @@ elseif K == 1
                 elseif R(i,j) > 3
                     disp('Reaction order not implemented for indeces:');
                     disp([i j]);
-                    disp('Consider doing so after line 208');
+                    disp('Consider doing so after line 175');
                 end
             end
             a(i) = a(i)*exp(BV(1,i)*BV(2,i)*f*(U-BV(3,i)));
             A = A + a(i);
             I = I + BV(1,i)*q_e*a(i);
+        end
+        % Writing initial conditions
+        if s == 1
+            Y(s,:) = X(:);
+            Z(s,:) = a(:);
         end
         % Checking for equillibrium
         if A == 0
@@ -265,7 +265,7 @@ elseif K == 2
                 elseif R(i,j) > 3
                     disp('Reaction order not implemented for indeces:');
                     disp([i j]);
-                    disp('Consider doing so after lines 264');
+                    disp('Consider doing so after lines 236');
                 end
             end
         end
@@ -284,6 +284,11 @@ elseif K == 2
         for i = 1:M
             a(i) = a(i)*exp(BV(1,i)*BV(2,i)*f*(U-BV(3,i)));
             A = A + a(i);
+        end
+        % Writing initial conditions
+        if s == 1
+            Y(s,:) = X(:);
+            Z(s,:) = a(:);
         end
         % Checking for equillibrium
         if A == 0 || isnan(A) == 1
@@ -319,7 +324,7 @@ end
 if K == 1 || K == 2
     subplot(2,1,1)
 end
-plot(T(1:s-1),Y(1:s-1,:),'-')
+plot(T(1:s-1),Y(1:s-1,:),'o-')
 xlabel('\bf{Time (s)}')
 ylabel('\bf{Population Number}')
 set(gca,'XMinorTick','on')
@@ -328,7 +333,7 @@ if K == 0
     res = [T Y Z];
 elseif K == 1
     subplot(2,1,2)
-    plot(T(1:s-1),J(1:s-1),'k-')
+    plot(T(1:s-1),J(1:s-1),'ko-')
     xlabel('\bf{Time (s)}')
     ylabel('\bf{Electric Current (A)}')
     set(gca,'XMinorTick','on')
@@ -336,7 +341,7 @@ elseif K == 1
     res = [T J Y Z];
 elseif K == 2
     subplot(2,1,2)
-    plot(T(1:s-1),E(1:s-1),'k-')
+    plot(T(1:s-1),E(1:s-1),'ko-')
     xlabel('\bf{Time (s)}')
     ylabel('\bf{Electrode Potential (V)}')
     set(gca,'XMinorTick','on')
